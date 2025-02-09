@@ -68,7 +68,8 @@ class MainWindow(QMainWindow):
             self.my_dll = MyDllWrapper(self.dll_path)
 
             # ✅ AllReadWrite 초기화 (self 전달)
-            self.arw_dll = AllReadWrite(self.dll_path, self)
+            # self.arw_dll = AllReadWrite(self.dll_path, self)
+            self.arw_dll = AllReadWrite(self.dll_path)
         except Exception as e:
             QMessageBox.critical(self, "DLL 로드 오류", f"DLL을 로드하는 중 오류 발생:\n{str(e)}")
             return        
@@ -337,17 +338,33 @@ class MainWindow(QMainWindow):
         #     raise RuntimeError(f"wrapAllReadWrite failed with error code {result}")        
     
         
-        if not self.arw_dll.hARW or self.arw_dll.hARW.value is None:
-            raise RuntimeError("Invalid hARW handle before calling wrapAllReadWrite!")
+        # if not self.arw_dll.hARW or self.arw_dll.hARW.value is None:
+        #     raise RuntimeError("Invalid hARW handle before calling wrapAllReadWrite!")
 
-        result = self.my_dll.wrapAllReadWrite(
-            ctypes.byref(self.arw_dll.hARW), ctypes.byref(ctypes.c_void_p(self))
-        )
+        # result = self.arw_dll.wrapAllReadWrite(
+        #     ctypes.byref(self.arw_dll.hARW), ctypes.byref(ctypes.c_void_p(self))
+        # )
 
-        if result != 0:
-            raise RuntimeError(f"wrapAllReadWrite failed with error code {result}")
+        # if result != 0:
+        #     raise RuntimeError(f"wrapAllReadWrite failed with error code {result}")
 
-        print("[DEBUG] wrapAllReadWrite executed successfully")        
+        # print("[DEBUG] wrapAllReadWrite executed successfully")        
+
+        # if not self.arw_dll.hARW or self.arw_dll.hARW.value is None:
+        #     raise RuntimeError("Invalid hARW handle before calling wrapAllReadWrite!")
+
+        # result = self.arw_dll.wrap_all_read_write()
+        
+        # if result != 0:
+        #     raise RuntimeError(f"wrapAllReadWrite failed with error code {result}")
+
+        # print("[DEBUG] wrapAllReadWrite executed successfully")
+        
+        result = self.arw_dll.wrap_all_read_write()  # wrap_all_read_write 호출
+        if result:
+            print(f"[DEBUG] wrap_all_read_write 성공, 결과: {result}")
+        else:
+            print("[ERROR] wrap_all_read_write 실패")
             
  
 if __name__ == "__main__":
