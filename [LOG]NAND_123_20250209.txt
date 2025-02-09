@@ -1,0 +1,6 @@
+AM 02:01:20,NAND_mode,AllRead,Initialization Pot Board
+AM 02:01:20,Initialize_mode,pot,Set TCP for One Board Pot
+AM 02:01:20,PLSetting_mode,setObp,Initialize OBP (One Board Pot)...
+AM 02:01:41,PLSetting_mode,setObp,Initializing One Board Pot is Failed
+AM 02:01:41,Initialize_mode,pot,Setting TCP for One Board Pot is Failed
+AM 02:01:41,NAND_mode,AllRead,Initialization Pot Board is Failed
