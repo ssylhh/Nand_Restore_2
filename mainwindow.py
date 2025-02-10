@@ -23,16 +23,18 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        self.ui.setupUi(self) 
 
         self.initial_setup() 
 
     def get_handler(self):
-        return id(self)  # 예시: GUI 핸들러 역할을 하는 값 반환
+        # return int(self.winId())  # 실제 윈도우 핸들 반환 (Windows 환경)
+        return id(self)
 
     def initial_setup(self):
 
         self.gridLayout = self.ui.gridLayout
+        handler = self.get_handler()
         
         # self.ping_ip()
         # threading.Thread(target=self.ping_ip, daemon=True).start()
@@ -64,16 +66,16 @@ class MainWindow(QMainWindow):
         # self.arw_dll = AllReadWrite(self.dll_path, self)              
         
         try:
-            # ✅ MyDllWrapper 먼저 초기화
             self.my_dll = MyDllWrapper(self.dll_path)
 
             # ✅ AllReadWrite 초기화 (self 전달)
             # self.arw_dll = AllReadWrite(self.dll_path, self)
-            self.arw_dll = AllReadWrite(self.dll_path)
+            # self.arw_dll = AllReadWrite(self.dll_path)
         except Exception as e:
             QMessageBox.critical(self, "DLL 로드 오류", f"DLL을 로드하는 중 오류 발생:\n{str(e)}")
             return        
 
+        self.arw_dll = AllReadWrite(self.dll_path, handler)
        
         self.ui.all_load.clicked.connect(lambda: self.all_load()) 
         self.ui.all_write.clicked.connect(lambda: self.arw())   

@@ -89,17 +89,17 @@ class MyDllWrapper:
 
     #     return result, hMethod  # 반환된 nErrorCode 값과 핸들   
      
-    def wrapMem_SParamterWriteOpen(self, path: str):
-        # hMethod를 void* 포인터로 초기화
-        hMethod = ctypes.c_void_p()  # NULL 포인터 생성
-        path_bytes = ctypes.create_string_buffer(path.encode('utf-8') + b'\0')
+    # def wrapMem_SParamterWriteOpen(self, path: str):
+    #     # hMethod를 void* 포인터로 초기화
+    #     hMethod = ctypes.c_void_p()  # NULL 포인터 생성
+    #     path_bytes = ctypes.create_string_buffer(path.encode('utf-8') + b'\0')
 
-        # DLL 함수 호출
-        result = self.dll.wrapMem_SParamterWriteOpen(
-            ctypes.byref(hMethod),  # 포인터 전달
-            path_bytes
-        )
+    #     # DLL 함수 호출
+    #     result = self.dll.wrapMem_SParamterWriteOpen(
+    #         ctypes.byref(hMethod),  # 포인터 전달
+    #         path_bytes
+    #     )
 
-        return result, hMethod  # 결과 코드와 핸들 반환    
+    #     return result, hMethod  # 결과 코드와 핸들 반환    
 
 
