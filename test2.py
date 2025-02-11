@@ -162,82 +162,90 @@
 import ctypes
 from typing import List, Tuple
 
-# class AllReadWrite:
+class AllReadWrite:
     
-#     def __init__(self, dll_path: str, handler1):
-#         """ 초기화: DLL 로드 및 핸들 설정 """
-#         self.dll = ctypes.CDLL(dll_path)
+    def __init__(self, dll_path: str, handler1):
+        """ 초기화: DLL 로드 및 핸들 설정 """
+        self.dll = ctypes.CDLL(dll_path)
 
-#         # wrapAllReadWrite 함수 시그니처 설정
-#         self.dll.wrapAllReadWrite.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p)]
-#         self.dll.wrapAllReadWrite.restype = ctypes.c_int
+        # wrapAllReadWrite 함수 시그니처 설정
+        self.dll.wrapAllReadWrite.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.POINTER(ctypes.c_void_p)]
+        self.dll.wrapAllReadWrite.restype = ctypes.c_int
 
-#         self.dll.wrapAllReadWrite_getCount.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
-#         self.dll.wrapAllReadWrite_getCount.restype = ctypes.c_int
+        self.dll.wrapAllReadWrite_getCount.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+        self.dll.wrapAllReadWrite_getCount.restype = ctypes.c_int
 
-#         self.dll.wrapAllReadWrite_getGroup.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p]
-#         self.dll.wrapAllReadWrite_getGroup.restype = None  # void 함수
+        self.dll.wrapAllReadWrite_getGroup.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p]
+        self.dll.wrapAllReadWrite_getGroup.restype = None  # void 함수
 
-#         self.dll.wrapAllReadWrite_getName.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p]
-#         self.dll.wrapAllReadWrite_getName.restype = ctypes.c_int
+        self.dll.wrapAllReadWrite_getName.argtypes = [ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p]
+        self.dll.wrapAllReadWrite_getName.restype = ctypes.c_int
 
-#         self.dll.wrapAllReadWrite_Read.argtypes = [
-#             ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-#         ]
-#         self.dll.wrapAllReadWrite_Read.restype = ctypes.c_int
+        self.dll.wrapAllReadWrite_Read.argtypes = [
+            ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
+        ]
+        self.dll.wrapAllReadWrite_Read.restype = ctypes.c_int
 
-#         self.dll.wrapAllReadWrite_Write.argtypes = [
-#             ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
-#         ]
-#         self.dll.wrapAllReadWrite_Write.restype = ctypes.c_int
+        self.dll.wrapAllReadWrite_Write.argtypes = [
+            ctypes.POINTER(ctypes.c_void_p), ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p
+        ]
+        self.dll.wrapAllReadWrite_Write.restype = ctypes.c_int
 
-#         # GUI 핸들 가져오기
-#         hgui = ctypes.c_void_p(handler1)
+        # GUI 핸들 가져오기
+        hgui = ctypes.c_void_p(handler1)
 
-#         # hARW 핸들 초기화
-#         self.hARW = ctypes.c_void_p(None)
+        # hARW 핸들 초기화
+        # self.hARW = ctypes.c_void_p(None)
+        self.hARW = ctypes.c_void_p()  
 
-#         # wrapAllReadWrite 호출하여 hARW 핸들 설정
-#         result = self.dll.wrapAllReadWrite(ctypes.byref(hgui), ctypes.byref(self.hARW))
+        print("self.hARW before calling function:", self.hARW)
+        
+        # wrapAllReadWrite 호출하여 hARW 핸들 설정
+        result = self.dll.wrapAllReadWrite(ctypes.byref(hgui), ctypes.byref(self.hARW))
 
-#         if result != 0:
-#             raise RuntimeError(f"wrapAllReadWrite failed with error code: {result}")
+        if result != 0:
+            raise RuntimeError(f"wrapAllReadWrite failed with error code: {result}")
 
-#         # 데이터 읽기 (C#의 getData()에 해당)
-#         self.datalist: List[Tuple[str, str]] = []
-#         self.get_data()
+        # 데이터 읽기 (C#의 getData()에 해당)
+        self.datalist: List[Tuple[str, str]] = []
+        self.get_data()
 
-#     def get_data(self):
-#         """ NAND 메모리에서 데이터를 로드하여 datalist에 저장 """
-#         total_count = self.dll.wrapAllReadWrite_getCount(ctypes.byref(self.hARW))
+    def get_data(self):
+        """ NAND 메모리에서 데이터를 로드하여 datalist에 저장 """
+        total_count = self.dll.wrapAllReadWrite_getCount(ctypes.byref(self.hARW))
 
-#         for i in range(total_count):
-#             # 그룹 이름 가져오기
-#             groupname = ctypes.create_string_buffer(256)  # 적절한 크기로 설정
-#             self.dll.wrapAllReadWrite_getGroup(ctypes.byref(self.hARW), i, groupname)
-#             group_name_str = groupname.value.decode('utf-8').replace('\x00', '').strip()
 
-#             # 파라미터 이름 가져오기
-#             paramname = ctypes.create_string_buffer(256)
-#             self.dll.wrapAllReadWrite_getName(ctypes.byref(self.hARW), i, paramname)
-#             param_name_str = paramname.value.decode('utf-8').replace('\x00', '').strip()
+        result = self.dll.wrapAllReadWrite_getCount(ctypes.byref(self.hARW))
+        if result == 0:  # DLL이 NULL을 반환하는 경우
+            raise RuntimeError("DLL returned NULL handle for hARW")
 
-#             # 리스트에 추가
-#             self.datalist.append((group_name_str, param_name_str))
+        for i in range(total_count):
+            # 그룹 이름 가져오기
+            groupname = ctypes.create_string_buffer(256)  # 적절한 크기로 설정
+            self.dll.wrapAllReadWrite_getGroup(ctypes.byref(self.hARW), i, groupname)
+            group_name_str = groupname.value.decode('utf-8').replace('\x00', '').strip()
 
-#     def read(self, num: int, pid: str, path: str) -> int:
-#         """ 특정 데이터를 읽음 """
-#         pid_bytes = pid.encode('utf-8') + b'\0'
-#         path_bytes = path.encode('utf-8') + b'\0'
+            # 파라미터 이름 가져오기
+            paramname = ctypes.create_string_buffer(256)
+            self.dll.wrapAllReadWrite_getName(ctypes.byref(self.hARW), i, paramname)
+            param_name_str = paramname.value.decode('utf-8').replace('\x00', '').strip()
 
-#         return self.dll.wrapAllReadWrite_Read(ctypes.byref(self.hARW), num, pid_bytes, path_bytes)
+            # 리스트에 추가
+            self.datalist.append((group_name_str, param_name_str))
 
-#     def write(self, num: int, pid: str, path: str) -> int:
-#         """ 특정 데이터를 씀 """
-#         pid_bytes = pid.encode('utf-8') + b'\0'
-#         path_bytes = path.encode('utf-8') + b'\0'
+    def read(self, num: int, pid: str, path: str) -> int:
+        """ 특정 데이터를 읽음 """
+        pid_bytes = pid.encode('utf-8') + b'\0'
+        path_bytes = path.encode('utf-8') + b'\0'
 
-#         return self.dll.wrapAllReadWrite_Write(ctypes.byref(self.hARW), num, pid_bytes, path_bytes)
+        return self.dll.wrapAllReadWrite_Read(ctypes.byref(self.hARW), num, pid_bytes, path_bytes)
+
+    def write(self, num: int, pid: str, path: str) -> int:
+        """ 특정 데이터를 씀 """
+        pid_bytes = pid.encode('utf-8') + b'\0'
+        path_bytes = path.encode('utf-8') + b'\0'
+
+        return self.dll.wrapAllReadWrite_Write(ctypes.byref(self.hARW), num, pid_bytes, path_bytes)
 
 
 # class AllReadWrite:
@@ -313,74 +321,74 @@ from typing import List, Tuple
 
 #         return self.dll.wrapAllReadWrite_Write(self.hARW, num, pid_bytes, path_bytes)
     
-class AllReadWrite:
-    def __init__(self, dll_path: str, handler1):
-        """ 초기화: DLL 로드 및 핸들 설정 """
-        self.dll = ctypes.CDLL(dll_path)
+# class AllReadWrite:
+#     def __init__(self, dll_path: str, handler1):
+#         """ 초기화: DLL 로드 및 핸들 설정 """
+#         self.dll = ctypes.CDLL(dll_path)
 
-        # wrapAllReadWrite 함수 시그니처 설정
-        self.dll.wrapAllReadWrite.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_void_p)]
-        self.dll.wrapAllReadWrite.restype = ctypes.c_int
+#         # wrapAllReadWrite 함수 시그니처 설정
+#         self.dll.wrapAllReadWrite.argtypes = [ctypes.c_void_p, ctypes.POINTER(ctypes.c_void_p)]
+#         self.dll.wrapAllReadWrite.restype = ctypes.c_int
 
-        self.dll.wrapAllReadWrite_getCount.argtypes = [ctypes.c_void_p]
-        self.dll.wrapAllReadWrite_getCount.restype = ctypes.c_int
+#         self.dll.wrapAllReadWrite_getCount.argtypes = [ctypes.c_void_p]
+#         self.dll.wrapAllReadWrite_getCount.restype = ctypes.c_int
 
-        self.dll.wrapAllReadWrite_getGroup.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p]
-        self.dll.wrapAllReadWrite_getGroup.restype = None
+#         self.dll.wrapAllReadWrite_getGroup.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p]
+#         self.dll.wrapAllReadWrite_getGroup.restype = None
 
-        self.dll.wrapAllReadWrite_getName.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p]
-        self.dll.wrapAllReadWrite_getName.restype = ctypes.c_int
+#         self.dll.wrapAllReadWrite_getName.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p]
+#         self.dll.wrapAllReadWrite_getName.restype = ctypes.c_int
 
-        self.dll.wrapAllReadWrite_Read.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p]
-        self.dll.wrapAllReadWrite_Read.restype = ctypes.c_int
+#         self.dll.wrapAllReadWrite_Read.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p]
+#         self.dll.wrapAllReadWrite_Read.restype = ctypes.c_int
 
-        self.dll.wrapAllReadWrite_Write.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p]
-        self.dll.wrapAllReadWrite_Write.restype = ctypes.c_int
+#         self.dll.wrapAllReadWrite_Write.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_char_p, ctypes.c_char_p]
+#         self.dll.wrapAllReadWrite_Write.restype = ctypes.c_int
 
-        # GUI 핸들 가져오기
-        hgui = ctypes.c_void_p(handler1)
+#         # GUI 핸들 가져오기
+#         hgui = ctypes.c_void_p(handler1)
 
-        # hARW 핸들 초기화 (None이 아니라 올바른 포인터로 초기화)
-        hARW = ctypes.c_void_p()
+#         # hARW 핸들 초기화 (None이 아니라 올바른 포인터로 초기화)
+#         hARW = ctypes.c_void_p()
 
-        # wrapAllReadWrite 호출하여 hARW 핸들 설정
-        result = self.dll.wrapAllReadWrite(hgui, ctypes.byref(hARW))
+#         # wrapAllReadWrite 호출하여 hARW 핸들 설정
+#         result = self.dll.wrapAllReadWrite(hgui, ctypes.byref(hARW))
 
-        if result != 0 or not hARW:
-            raise RuntimeError(f"wrapAllReadWrite failed with error code: {result}")
+#         if result != 0 or not hARW:
+#             raise RuntimeError(f"wrapAllReadWrite failed with error code: {result}")
 
-        # hARW를 인스턴스 변수로 저장
-        self.hARW = hARW
+#         # hARW를 인스턴스 변수로 저장
+#         self.hARW = hARW
 
-        # 데이터 읽기
-        self.datalist: List[Tuple[str, str]] = []
-        self.get_data()
+#         # 데이터 읽기
+#         self.datalist: List[Tuple[str, str]] = []
+#         self.get_data()
 
-    def get_data(self):
-        """ NAND 메모리에서 데이터를 로드하여 datalist에 저장 """
-        total_count = self.dll.wrapAllReadWrite_getCount(self.hARW)
+#     def get_data(self):
+#         """ NAND 메모리에서 데이터를 로드하여 datalist에 저장 """
+#         total_count = self.dll.wrapAllReadWrite_getCount(self.hARW)
 
-        for i in range(total_count):
-            groupname = ctypes.create_string_buffer(256)
-            self.dll.wrapAllReadWrite_getGroup(self.hARW, i, groupname)
-            group_name_str = groupname.value.decode('utf-8').strip()
+#         for i in range(total_count):
+#             groupname = ctypes.create_string_buffer(256)
+#             self.dll.wrapAllReadWrite_getGroup(self.hARW, i, groupname)
+#             group_name_str = groupname.value.decode('utf-8').strip()
 
-            paramname = ctypes.create_string_buffer(256)
-            self.dll.wrapAllReadWrite_getName(self.hARW, i, paramname)
-            param_name_str = paramname.value.decode('utf-8').strip()
+#             paramname = ctypes.create_string_buffer(256)
+#             self.dll.wrapAllReadWrite_getName(self.hARW, i, paramname)
+#             param_name_str = paramname.value.decode('utf-8').strip()
 
-            self.datalist.append((group_name_str, param_name_str))
+#             self.datalist.append((group_name_str, param_name_str))
 
-    def read(self, num: int, pid: str, path: str) -> int:
-        """ 특정 데이터를 읽음 """
-        pid_bytes = pid.encode('utf-8') + b'\0'
-        path_bytes = path.encode('utf-8') + b'\0'
+#     def read(self, num: int, pid: str, path: str) -> int:
+#         """ 특정 데이터를 읽음 """
+#         pid_bytes = pid.encode('utf-8') + b'\0'
+#         path_bytes = path.encode('utf-8') + b'\0'
 
-        return self.dll.wrapAllReadWrite_Read(self.hARW, num, pid_bytes, path_bytes)
+#         return self.dll.wrapAllReadWrite_Read(self.hARW, num, pid_bytes, path_bytes)
 
-    def write(self, num: int, pid: str, path: str) -> int:
-        """ 특정 데이터를 씀 """
-        pid_bytes = pid.encode('utf-8') + b'\0'
-        path_bytes = path.encode('utf-8') + b'\0'
+#     def write(self, num: int, pid: str, path: str) -> int:
+#         """ 특정 데이터를 씀 """
+#         pid_bytes = pid.encode('utf-8') + b'\0'
+#         path_bytes = path.encode('utf-8') + b'\0'
 
-        return self.dll.wrapAllReadWrite_Write(self.hARW, num, pid_bytes, path_bytes)
+#         return self.dll.wrapAllReadWrite_Write(self.hARW, num, pid_bytes, path_bytes)
